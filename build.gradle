@@ -15,7 +15,7 @@ idea {
 }
 
 allprojects {
-    group "ru.otus"
+    group "ru.ru.otus"
 
     repositories {
         mavenLocal()
@@ -31,6 +31,7 @@ allprojects {
             dependency("com.google.guava:guava:${Versions.guava}")
             dependency("org.openjdk.jmh:jmh-core:${Versions.jmh}")
             dependency("org.openjdk.jmh:jmh-generator-annprocess:${Versions.jmh}")
+            dependency("org.ow2.asm:asm-commons:${Versions.asm}")
         }
     }
 
