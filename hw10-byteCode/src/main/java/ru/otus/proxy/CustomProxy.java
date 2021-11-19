@@ -7,9 +7,7 @@ import ru.otus.testclasses.ICalculator;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class CustomProxy {
 
@@ -21,16 +19,16 @@ public class CustomProxy {
 
     static class DemoInvocationHandler implements InvocationHandler {
         private final ICalculator myClass;
-        private final List<Method> methods;
+        private final Method[] declaredMethods;
 
         DemoInvocationHandler(ICalculator myClass) {
             this.myClass = myClass;
-            methods = new ArrayList<>(Arrays.asList(myClass.getClass().getDeclaredMethods()));
+            declaredMethods = myClass.getClass().getDeclaredMethods();
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            for (final Method methodItem : methods) {
+           for (final Method methodItem : declaredMethods) {
                 if(methodItem.getName().equals(method.getName()) &&
                         isTheSameParamSet(method.getParameters(), methodItem.getParameters()))
                 if (methodItem.isAnnotationPresent(Log.class)) {
@@ -43,8 +41,7 @@ public class CustomProxy {
         static boolean isTheSameParamSet(Parameter[] calledMethodParams, Parameter[] declaredMethodParams) {
             if( calledMethodParams.length != declaredMethodParams.length) return false;
             for (int i = 0; i< calledMethodParams.length; i++){
-                if(!calledMethodParams[i].getName().equals(declaredMethodParams[i].getName()) ||
-                        !calledMethodParams[i].getType().equals(declaredMethodParams[i].getType())) {
+                if(!calledMethodParams[i].getType().equals(declaredMethodParams[i].getType())) {
                     return false;
                 }
             }
