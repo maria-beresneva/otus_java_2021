@@ -21,15 +21,16 @@ public class CustomProxy {
 
     static class DemoInvocationHandler implements InvocationHandler {
         private final ICalculator myClass;
+        private final List<Method> methods;
 
         DemoInvocationHandler(ICalculator myClass) {
             this.myClass = myClass;
+            methods = new ArrayList<>(Arrays.asList(myClass.getClass().getDeclaredMethods()));
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            final List<Method> allMethods = new ArrayList<>(Arrays.asList(myClass.getClass().getDeclaredMethods()));
-            for (final Method methodItem : allMethods) {
+            for (final Method methodItem : methods) {
                 if(methodItem.getName().equals(method.getName()) &&
                         isTheSameParamSet(method.getParameters(), methodItem.getParameters()))
                 if (methodItem.isAnnotationPresent(Log.class)) {
