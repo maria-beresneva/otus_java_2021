@@ -8,6 +8,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CustomProxy {
 
@@ -19,23 +21,40 @@ public class CustomProxy {
 
     static class DemoInvocationHandler implements InvocationHandler {
         private final ICalculator myClass;
+        private final Map<String, Boolean> isUsingProxy;
         private final Method[] declaredMethods;
 
         DemoInvocationHandler(ICalculator myClass) {
             this.myClass = myClass;
+
             declaredMethods = myClass.getClass().getDeclaredMethods();
+
+            Class<ICalculator> calcClass = ICalculator.class;
+            isUsingProxy =
+                    Arrays.stream(calcClass.getDeclaredMethods())
+                            .collect(
+                                    Collectors.toMap(
+                                            Method::toString,
+                                            this::hasAnnotation));
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-           for (final Method methodItem : declaredMethods) {
-                if(methodItem.getName().equals(method.getName()) &&
-                        isTheSameParamSet(method.getParameters(), methodItem.getParameters()))
-                if (methodItem.isAnnotationPresent(Log.class)) {
-                    System.out.println("Logging params :" + Arrays.toString(args));
-                }
+            if (isUsingProxy.get(method.toString())) {
+                System.out.println("Logging params :" + Arrays.toString(args));
             }
             return method.invoke(myClass, args);
+        }
+
+        boolean hasAnnotation(Method method) {
+            for (final Method methodItem : declaredMethods) {
+                if(methodItem.getName().equals(method.getName()) &&
+                        isTheSameParamSet(method.getParameters(), methodItem.getParameters()))
+                    if (methodItem.isAnnotationPresent(Log.class)) {
+                        return true;
+                    }
+            }
+            return false;
         }
 
         static boolean isTheSameParamSet(Parameter[] calledMethodParams, Parameter[] declaredMethodParams) {
