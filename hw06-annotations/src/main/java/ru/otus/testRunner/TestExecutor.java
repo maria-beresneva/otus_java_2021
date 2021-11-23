@@ -14,6 +14,26 @@ class TestExecutor {
             List<Method> afterMethods,
             Method testMethod,
             Object testingClassObject) {
+        TestResult testResult = beforeMethodResult(beforeMethods, testMethod, testingClassObject);
+
+        testResult = testingMethodResult(testResult, testMethod, testingClassObject);
+
+        testResult = afterMethodResult(testResult, afterMethods, testMethod, testingClassObject);
+
+        return testResult;
+    }
+
+    private static String getExceptionAsString(Throwable exception) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        exception.printStackTrace(printWriter);
+        return stringWriter.toString();
+    }
+
+    private static TestResult beforeMethodResult(
+            List<Method> beforeMethods,
+            Method testMethod,
+            Object testingClassObject) {
         TestResult testResult = new TestResult(TestStatus.SUCCESS, testMethod.getName(), null);
         try {
             for (Method beforeMethod : beforeMethods) {
@@ -30,7 +50,13 @@ class TestExecutor {
                     testMethod.getName(),
                     getExceptionAsString(e));
         }
+        return testResult;
+    }
 
+    private static TestResult testingMethodResult(
+            TestResult testResult,
+            Method testMethod,
+            Object testingClassObject) {
         if (!testResult.getTestStatus().equals(TestStatus.SKIPPED)) {
             try {
                 testMethod.invoke(testingClassObject);
@@ -46,7 +72,14 @@ class TestExecutor {
                         getExceptionAsString(e));
             }
         }
+    return testResult;
+    }
 
+    private static TestResult afterMethodResult(
+            TestResult testResult,
+            List<Method> afterMethods,
+            Method testMethod,
+            Object testingClassObject) {
         try {
             for (Method afterMethod : afterMethods) {
                 afterMethod.invoke(testingClassObject);
@@ -65,12 +98,5 @@ class TestExecutor {
                         getExceptionAsString(e));
         }
         return testResult;
-    }
-
-    private static String getExceptionAsString(Throwable exception) {
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(stringWriter);
-        exception.printStackTrace(printWriter);
-        return stringWriter.toString();
     }
 }

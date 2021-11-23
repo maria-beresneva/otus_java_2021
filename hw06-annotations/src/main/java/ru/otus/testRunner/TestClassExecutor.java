@@ -4,6 +4,7 @@ import ru.otus.testRunner.annotations.After;
 import ru.otus.testRunner.annotations.Before;
 import ru.otus.testRunner.annotations.Test;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,25 +18,20 @@ public class TestClassExecutor {
         List<Method> testMethods = extractAnnotatedMethods(testingClass.getDeclaredMethods(), Test.class);
         List<TestResult> testResults = new ArrayList<>();
 
-        try {
-            testClassObject = testingClass.getConstructor().newInstance();
-        } catch (NoSuchMethodException
-                | SecurityException
-                | InstantiationException
-                | IllegalAccessException
-                | InvocationTargetException e) {
-            throw new IllegalArgumentException(String.format("Failed to initialize class %s. It should have default " +
-                    "public constructor without arguments", testingClass));
-        }
+        testClassObject = createObject(testingClass);
 
         testMethods.forEach(testMethod -> {
-           testResults.add(TestExecutor.execute(beforeMethods, afterMethods, testMethod, testClassObject));
+           final TestResult testResult =
+                   TestExecutor.execute(beforeMethods, afterMethods, testMethod, testClassObject);
+           testResults.add(testResult);
         });
 
         ReportGenerator.printTestReport(testingClass, testResults);
     }
 
-    private static List<Method> extractAnnotatedMethods(Method[] classMethods, Class annotationClass) {
+    private static List<Method> extractAnnotatedMethods(
+            Method[] classMethods,
+            Class<? extends Annotation> annotationClass) {
         List<Method> annotatedMethods = new ArrayList<>();
         for (Method method : classMethods) {
             if (method.isAnnotationPresent(annotationClass)) {
@@ -49,5 +45,18 @@ public class TestClassExecutor {
             }
         }
         return annotatedMethods;
+    }
+
+    private static Object createObject(Class testingClass) {
+        try {
+            return testingClass.getConstructor().newInstance();
+        } catch (NoSuchMethodException
+                | SecurityException
+                | InstantiationException
+                | IllegalAccessException
+                | InvocationTargetException e) {
+            throw new IllegalArgumentException(String.format("Failed to initialize class %s. It should have default " +
+                    "public constructor without arguments", testingClass));
+        }
     }
 }
