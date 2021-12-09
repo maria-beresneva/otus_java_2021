@@ -102,6 +102,10 @@ public class Message {
         return field13;
     }
 
+    public Message clone() {
+        return this.toBuilder().field13(getField13().clone()).build();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

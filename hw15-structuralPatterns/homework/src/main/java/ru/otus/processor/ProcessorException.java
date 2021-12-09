@@ -15,7 +15,7 @@ public class ProcessorException implements Processor {
     @Override
     public Message process(Message message) {
         if((localDateTime.getDate().getSecond() % 2) == 0) {
-            throw new UnsupportedOperationException();
+            throw new IllegalStateException();
         }
         else return message;
     }

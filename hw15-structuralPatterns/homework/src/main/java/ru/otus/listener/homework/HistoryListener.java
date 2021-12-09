@@ -4,30 +4,21 @@ import ru.otus.listener.Listener;
 import ru.otus.model.Message;
 import ru.otus.model.ObjectForMessage;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class HistoryListener implements Listener, HistoryReader {
-    private final Map<Long, TreeMap<Long, Message>> messages = new HashMap<>();
+    private final Map<Long, Message> messages = new HashMap<>();
 
     @Override
     public void onUpdated(Message msg) {
-        ObjectForMessage savedObjectForMessage = null;
-
-        if(msg.getField13()!=null){
-            savedObjectForMessage = new ObjectForMessage();
-            savedObjectForMessage.setData(new ArrayList<>(msg.getField13().getData()));
-        }
-
-        Message savedMessage = msg.toBuilder().field13(savedObjectForMessage).build();
-
-        messages.computeIfAbsent(msg.getId(), k -> new TreeMap<>());
-        var messageHistory = messages.get(msg.getId());
-        messageHistory.put(System.currentTimeMillis(),savedMessage);
-        messages.put(msg.getId(), messageHistory);
+        messages.put(msg.getId(),  msg.clone());
     }
 
     @Override
     public Optional<Message> findMessageById(long id) {
-        return Optional.ofNullable(messages.get(id).firstEntry().getValue());
+        return Optional.ofNullable(messages.get(id));
     }
 }

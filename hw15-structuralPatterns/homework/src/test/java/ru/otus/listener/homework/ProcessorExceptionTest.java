@@ -8,6 +8,7 @@ import ru.otus.processor.DateTimeProvider;
 import ru.otus.processor.ProcessorException;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -16,8 +17,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ProcessorExceptionTest {
 
     @Test
-    void processorExceptionTest() throws InterruptedException {
-        final DateTimeProvider localDateTime = LocalDateTime::now;
+    void processorExceptionTest() {
+        final DateTimeProvider localDateTime = new DateTimeProvider() {
+            LocalDateTime datetime = LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC);
+            @Override
+            public LocalDateTime getDate() {
+                datetime = datetime.plusSeconds(1);
+                return datetime;
+            }
+        };
 
         //given
         var processorException = new ProcessorException(localDateTime);
@@ -27,15 +35,9 @@ class ProcessorExceptionTest {
                 .field10("field10")
                 .build();
 
-        //when
-        if(localDateTime.getDate().getSecond() % 2 == 0) {
-            Thread.sleep(1000);
-        }
-
         //then
         assertThat(processorException.process(message)).isEqualTo(message);
-        Thread.sleep(1000);
 
-        assertThrows(UnsupportedOperationException.class, () -> processorException.process(message));
+        assertThrows(IllegalStateException.class, () -> processorException.process(message));
     }
 }
