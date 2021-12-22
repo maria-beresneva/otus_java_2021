@@ -16,7 +16,7 @@ public class FileSerializer implements Serializer {
         try(FileOutputStream fileOutputStream = new FileOutputStream(fileNameForOutput)){
             new ObjectMapper().writeValue(fileOutputStream, data);
         } catch (IOException e) {
-            throw new UnsupportedOperationException(e);
+            throw new UncheckedIOException(e);
         }
     }
 }
