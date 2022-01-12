@@ -11,6 +11,7 @@ dependencies {
     implementation('org.flywaydb:flyway-core')
 
     implementation("org.postgresql:postgresql")
+    implementation 'org.projectlombok:lombok:1.18.20'
 
     testImplementation("com.h2database:h2")
     testImplementation("org.junit.jupiter:junit-jupiter-engine")
@@ -20,6 +21,9 @@ dependencies {
 
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
+
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
 test {
