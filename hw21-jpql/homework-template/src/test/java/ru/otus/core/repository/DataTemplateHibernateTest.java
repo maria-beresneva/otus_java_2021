@@ -3,7 +3,11 @@ package ru.otus.core.repository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.base.AbstractHibernateTest;
+import ru.otus.crm.model.Address;
 import ru.otus.crm.model.Client;
+import ru.otus.crm.model.Phone;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,7 +17,7 @@ class DataTemplateHibernateTest extends AbstractHibernateTest {
     @DisplayName(" корректно сохраняет, изменяет и загружает клиента по заданному id")
     void shouldSaveAndFindCorrectClientById() {
         //given
-        var client = new Client("Вася");
+        var client = new Client(null, "Вася", new Address(null, "AnyStreet"), List.of(new Phone(null, "13-555-22")));
 
         //when
         var savedClient = transactionManager.doInTransaction(session -> {

@@ -1,15 +1,18 @@
 package ru.otus.crm.model;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "client")
+@Getter
+@Setter
+@AllArgsConstructor
 public class Client implements Cloneable {
 
     @Id
@@ -19,6 +22,14 @@ public class Client implements Cloneable {
 
     @Column(name = "name")
     private String name;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "address_id", updatable = false)
+    private Address address;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "client_id", updatable = false, nullable=false)
+    private List<Phone> phones;
 
     public Client() {
     }
@@ -35,23 +46,7 @@ public class Client implements Cloneable {
 
     @Override
     public Client clone() {
-        return new Client(this.id, this.name);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return new Client(this.id, this.name, address.clone(), phones.stream().map(Phone::clone).toList());
     }
 
     @Override
