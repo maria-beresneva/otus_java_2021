@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.otus.core.repository.DataTemplateHibernateTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-01-12T05:05:48" hostname="MOS-02DQ3LDMD6P" time="1.423">
+  <properties/>
+  <testcase name="корректно сохраняет, изменяет и загружает клиента по заданному id" classname="ru.otus.core.repository.DataTemplateHibernateTest" time="1.423"/>
+  <system-out><![CDATA[2022-01-12_08:05:45.619 INFO  o.t.d.DockerClientProviderStrategy - Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+2022-01-12_08:05:46.062 INFO  o.t.d.DockerClientProviderStrategy - Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+2022-01-12_08:05:46.063 INFO  o.testcontainers.DockerClientFactory - Docker host IP address is localhost
+2022-01-12_08:05:46.097 INFO  o.testcontainers.DockerClientFactory - Connected to docker: 
+  Server Version: 20.10.11
+  API Version: 1.41
+  Operating System: Docker Desktop
+  Total Memory: 1985 MB
+2022-01-12_08:05:46.099 INFO  o.t.utility.ImageNameSubstitutor - Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2022-01-12_08:05:46.665 INFO  o.testcontainers.DockerClientFactory - Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2022-01-12_08:05:46.665 INFO  o.testcontainers.DockerClientFactory - Checking the system...
+2022-01-12_08:05:46.666 INFO  o.testcontainers.DockerClientFactory - ✔︎ Docker server version should be at least 1.6.0
+2022-01-12_08:05:46.794 INFO  o.testcontainers.DockerClientFactory - ✔︎ Docker environment should have more than 2GB free disk space
+2022-01-12_08:05:46.812 INFO  ]]>&#x1f433;<![CDATA[ [postgres:12] - Creating container for image: postgres:12
+2022-01-12_08:05:46.881 INFO  ]]>&#x1f433;<![CDATA[ [postgres:12] - Starting container with ID: d0f3f542175334f653a0b4755ba91e1703905486c133325dbf820f6d2dbee5c7
+2022-01-12_08:05:47.178 INFO  ]]>&#x1f433;<![CDATA[ [postgres:12] - Container postgres:12 is starting: d0f3f542175334f653a0b4755ba91e1703905486c133325dbf820f6d2dbee5c7
+2022-01-12_08:05:48.459 INFO  ]]>&#x1f433;<![CDATA[ [postgres:12] - Container postgres:12 started in PT1.664065S
+2022-01-12_08:05:48.460 INFO  ru.otus.base.TestContainersConfig - postgres in docker started: url=jdbc:postgresql://localhost:55027/test?loggerLevel=OFF&stringtype=unspecified
+2022-01-12_08:05:48.495 INFO  r.o.c.d.MigrationsExecutorFlyway - db migration started...
+2022-01-12_08:05:48.496 INFO  o.f.c.i.license.VersionPrinter - Flyway Community Edition 7.7.3 by Redgate
+2022-01-12_08:05:48.582 INFO  o.f.c.i.database.base.DatabaseType - Database: jdbc:postgresql://localhost:55027/test (PostgreSQL 12.9)
+2022-01-12_08:05:48.621 INFO  o.f.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.014s)
+2022-01-12_08:05:48.641 INFO  o.f.c.i.s.JdbcTableSchemaHistory - Creating Schema History table "public"."flyway_schema_history" ...
+2022-01-12_08:05:48.653 INFO  o.f.c.i.s.DefaultSqlScriptExecutor - 0 rows affected
+2022-01-12_08:05:48.656 INFO  o.f.c.i.s.DefaultSqlScriptExecutor - 0 rows affected
+2022-01-12_08:05:48.658 INFO  o.f.c.i.s.DefaultSqlScriptExecutor - 0 rows affected
+2022-01-12_08:05:48.675 INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": << Empty Schema >>
+2022-01-12_08:05:48.685 INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version "1 - initial schema"
+2022-01-12_08:05:48.691 INFO  o.f.c.i.s.DefaultSqlScriptExecutor - 0 rows affected
+2022-01-12_08:05:48.694 INFO  o.f.c.i.s.DefaultSqlScriptExecutor - 0 rows affected
+2022-01-12_08:05:48.697 INFO  o.f.c.i.s.DefaultSqlScriptExecutor - 0 rows affected
+2022-01-12_08:05:48.699 INFO  o.f.c.i.s.DefaultSqlScriptExecutor - 0 rows affected
+2022-01-12_08:05:48.722 INFO  o.f.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "public", now at version v1 (execution time 00:00.055s)
+2022-01-12_08:05:48.726 INFO  r.o.c.d.MigrationsExecutorFlyway - db migration finished.
+Hibernate: select nextval ('hibernate_sequence')
+Hibernate: select nextval ('hibernate_sequence')
+Hibernate: select nextval ('hibernate_sequence')
+Hibernate: insert into address (street, id) values (?, ?)
+Hibernate: insert into client (address_id, name, id) values (?, ?, ?)
+Hibernate: insert into phone (number, client_id, id) values (?, ?, ?)
+Hibernate: select client0_.id as id1_1_0_, client0_.address_id as address_3_1_0_, client0_.name as name2_1_0_, address1_.id as id1_0_1_, address1_.street as street2_0_1_, phones2_.client_id as client_i3_2_2_, phones2_.id as id1_2_2_, phones2_.id as id1_2_3_, phones2_.number as number2_2_3_ from client client0_ left outer join address address1_ on client0_.address_id=address1_.id left outer join phone phones2_ on client0_.id=phones2_.client_id where client0_.id=?
+Hibernate: select client0_.id as id1_1_2_, client0_.address_id as address_3_1_2_, client0_.name as name2_1_2_, address1_.id as id1_0_0_, address1_.street as street2_0_0_, phones2_.client_id as client_i3_2_4_, phones2_.id as id1_2_4_, phones2_.id as id1_2_1_, phones2_.number as number2_2_1_ from client client0_ left outer join address address1_ on client0_.address_id=address1_.id left outer join phone phones2_ on client0_.id=phones2_.client_id where client0_.id=?
+Hibernate: update client set name=? where id=?
+Hibernate: select client0_.id as id1_1_0_, client0_.address_id as address_3_1_0_, client0_.name as name2_1_0_, address1_.id as id1_0_1_, address1_.street as street2_0_1_, phones2_.client_id as client_i3_2_2_, phones2_.id as id1_2_2_, phones2_.id as id1_2_3_, phones2_.number as number2_2_3_ from client client0_ left outer join address address1_ on client0_.address_id=address1_.id left outer join phone phones2_ on client0_.id=phones2_.client_id where client0_.id=?
+Hibernate: select client0_.id as id1_1_, client0_.address_id as address_3_1_, client0_.name as name2_1_ from client client0_
+Hibernate: select address0_.id as id1_0_0_, address0_.street as street2_0_0_ from address address0_ where address0_.id=?
+Hibernate: select phones0_.client_id as client_i3_2_0_, phones0_.id as id1_2_0_, phones0_.id as id1_2_1_, phones0_.number as number2_2_1_ from phone phones0_ where phones0_.client_id=?
+Hibernate: select client0_.id as id1_1_, client0_.address_id as address_3_1_, client0_.name as name2_1_ from client client0_ where client0_.name=?
+Hibernate: select address0_.id as id1_0_0_, address0_.street as street2_0_0_ from address address0_ where address0_.id=?
+Hibernate: select phones0_.client_id as client_i3_2_0_, phones0_.id as id1_2_0_, phones0_.id as id1_2_1_, phones0_.number as number2_2_1_ from phone phones0_ where phones0_.client_id=?
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
