@@ -6,6 +6,10 @@ import ru.otus.core.repository.DataTemplate;
 import ru.otus.crm.model.Client;
 import ru.otus.core.sessionmanager.TransactionManager;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +22,7 @@ public class DbServiceClientImpl implements DBServiceClient {
     public DbServiceClientImpl(TransactionManager transactionManager, DataTemplate<Client> clientDataTemplate) {
         this.transactionManager = transactionManager;
         this.clientDataTemplate = clientDataTemplate;
+
     }
 
     @Override
