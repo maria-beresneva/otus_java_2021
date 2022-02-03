@@ -1,0 +1,96 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Clients</title>
+    <script>
+        function createClient() {
+            const clientDataContainer = document.getElementById('clientDataContainer');
+
+            var client = new Object();
+            client.name = document.getElementById('clientNameTextBox').value;
+            client.address = document.getElementById('clientAddressTextBox').value;
+            client.phones = document.getElementById('clientPhonesTextBox').value.split(',');
+
+            fetch('api/client', {
+                credentials: 'include',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(client),
+            })
+                .then(response => response.json());
+        }
+
+         function findAll() {
+            const clientDataContainer = document.getElementById('clientDataContainer');
+
+            var client = new Object();
+            client.name = document.getElementById('clientNameTextBox').value;
+            client.address = document.getElementById('clientAddressTextBox').value;
+            client.phones = document.getElementById('clientPhonesTextBox').value.split(',');
+
+            fetch('api/client', {
+                credentials: 'include',
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => response.json())
+                .then(clients => findAllClients.innerHTML = constructTable(clients));
+        }
+
+           function constructTable(list) {
+            // Traversing the JSON data
+            var body = '';
+            for (var i = 0; i < list.length; i++) {
+                var row = "<tr><td>";
+                var val = list[i];
+                row = row + val.id + '</td><td>';
+                row = row + val.name + '</td><td>';
+                row = row + val.address.street + '</td><td><pre>';
+                for (var phoneIndex = 0; phoneIndex < val.phones.length; phoneIndex++) {
+                    row = row + val.phones[phoneIndex].number + ' ';
+                }
+                row = row + '</pre></td>';
+                body = body + row + '</tr>';
+            };
+            return body;
+        }
+    </script>
+</head>
+
+<body>
+<h4>Создать клиента</h4>
+<input type="text" id="clientNameTextBox" value="Иван" placeholder="Введите имя клиента" size="25">
+<input type="text" id="clientAddressTextBox" value="Ивановка, третья хата справа" placeholder="Введите адрес клиента"
+       size="50">
+<input type="text" id="clientPhonesTextBox" value="+7777777777,8926926926"
+       placeholder="Введите телефоны клиента через запятую" size="50">
+<button onclick="createClient()">Создать</button>
+<pre id="clientDataContainer"></pre>
+
+<h4>Существующие клиенты</h4>
+<button onClick="findAll()">Загрузить список клиентов</button>
+<table>
+    <thead>
+    <tr>
+        <td style="width: 50px">Id</td>
+        <td style="width: 150px">Имя</td>
+        <td style="width: 350px">Адрес</td>
+        <td style="width: 450px">Телефоны</td>
+    </tr>
+    </thead>
+    <tbody id="findAllClients">
+    <#list clients as client>
+    <tr>
+        <td>${client.id}</td>
+        <td>${client.name}</td>
+        <td>${client.address.street}</td>
+        <td><#list client.phones as phone>${phone.number}<#sep>,</#list></td>
+    </tr>
+    </#list>
+    </tbody>
+    </table>
+</body>
+</html>
