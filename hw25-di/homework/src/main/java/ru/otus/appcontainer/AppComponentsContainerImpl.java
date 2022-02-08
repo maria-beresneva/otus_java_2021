@@ -38,8 +38,10 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
             final Object[] args = getArguments(method);
             try {
                 final Object executionResult = method.invoke(instance, args);
-                appComponentsByName.put(componentName, executionResult);
-                appComponents.add(executionResult);
+                if(!appComponentsByName.containsKey(componentName)) {
+                    appComponentsByName.put(componentName, executionResult);
+                    appComponents.add(executionResult);
+                }
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new IllegalArgumentException(String.format("Failed to initialize app component %s. ", componentName));
             }
@@ -85,6 +87,6 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         return appComponents.stream()
                 .filter(component -> param.isAssignableFrom(component.getClass()))
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 }
