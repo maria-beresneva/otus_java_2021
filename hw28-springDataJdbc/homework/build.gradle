@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.6.3'
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+dependencies {
+    implementation("ch.qos.logback:logback-classic")
+    implementation("com.google.code.gson:gson:${Versions.gson}")
+
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework:spring-webmvc'
+    implementation 'org.springframework:spring-web'
+
+    implementation 'org.thymeleaf:thymeleaf'
+    implementation 'org.thymeleaf:thymeleaf-spring5'
+
+    implementation("org.hibernate:hibernate-core")
+    implementation('org.flywaydb:flyway-core')
+
+    implementation("org.postgresql:postgresql")
+    implementation 'org.projectlombok:lombok:1.18.20'
+
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation("org.assertj:assertj-core")
+    testImplementation("org.mockito:mockito-junit-jupiter")
+
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
+
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.with {
+        encoding = 'UTF-8'
+    }
+}
