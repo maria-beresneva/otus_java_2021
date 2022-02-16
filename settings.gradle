@@ -18,3 +18,5 @@ include 'hw24-webserver:homework-template'
 include 'hw25-di:class-demo'
 include 'hw25-di:homework'
 include 'hw28-springDataJdbc:homework'
+include 'hw31-threads'
+
