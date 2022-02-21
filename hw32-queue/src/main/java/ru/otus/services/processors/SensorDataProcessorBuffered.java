@@ -6,12 +6,16 @@ import ru.otus.lib.SensorDataBufferedWriter;
 import ru.otus.api.SensorDataProcessor;
 import ru.otus.api.model.SensorData;
 
+import java.time.LocalDateTime;
+import java.util.*;
+
 // Этот класс нужно реализовать
 public class SensorDataProcessorBuffered implements SensorDataProcessor {
     private static final Logger log = LoggerFactory.getLogger(SensorDataProcessorBuffered.class);
 
     private final int bufferSize;
     private final SensorDataBufferedWriter writer;
+    private final Map<LocalDateTime, SensorData> bufferedData = new TreeMap<>();
 
     public SensorDataProcessorBuffered(int bufferSize, SensorDataBufferedWriter writer) {
         this.bufferSize = bufferSize;
@@ -20,16 +24,18 @@ public class SensorDataProcessorBuffered implements SensorDataProcessor {
 
     @Override
     public void process(SensorData data) {
-    /*
-        if (dataBuffer.size() >= bufferSize) {
+        if (bufferedData.size() >= bufferSize) {
             flush();
         }
-    */
+        bufferedData.put(data.getMeasurementTime(), data);
     }
 
-    public void flush() {
+    public synchronized void flush() {
         try {
-            //writer.writeBufferedData(bufferedData);
+            if(bufferedData.size()>0) {
+                writer.writeBufferedData(bufferedData.values().stream().toList());
+                bufferedData.clear();
+           }
         } catch (Exception e) {
             log.error("Ошибка в процессе записи буфера", e);
         }
