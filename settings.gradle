@@ -20,4 +20,5 @@ include 'hw25-di:homework'
 include 'hw28-springDataJdbc:homework'
 include 'hw31-threads'
 include 'hw32-queue'
+include 'hw33-gRPC:grpc'
 
